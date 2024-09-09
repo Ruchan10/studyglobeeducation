@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/studyglobeeducation/static/css/main.4167d6a6.css",
-    "main.js": "/studyglobeeducation/static/js/main.062e63f8.js",
+    "main.css": "/studyglobeeducation/static/css/main.eb7ab493.css",
+    "main.js": "/studyglobeeducation/static/js/main.8bbfd95f.js",
     "static/js/787.d02ef714.chunk.js": "/studyglobeeducation/static/js/787.d02ef714.chunk.js",
     "static/media/banner5.jpg": "/studyglobeeducation/static/media/banner5.2451fb3c8201b8b3c02d.jpg",
     "static/media/Arial.ttf": "/studyglobeeducation/static/media/Arial.178a7b1671683dd3e805.ttf",
@@ -11,11 +11,11 @@
     "static/media/DIN Condensed Bold.ttf": "/studyglobeeducation/static/media/DIN Condensed Bold.4cb4db43aab85595cc37.ttf",
     "static/media/scholarship.png": "/studyglobeeducation/static/media/scholarship.f2755664176f5fb9d54d.png",
     "static/media/DIN Alternate Bold.ttf": "/studyglobeeducation/static/media/DIN Alternate Bold.dc2106363a0044039a52.ttf",
+    "static/media/logo.png": "/studyglobeeducation/static/media/logo.af1a61ab4c040157ee92.png",
     "static/media/appliSupport.png": "/studyglobeeducation/static/media/appliSupport.ddbca4079d0d104d72d4.png",
     "static/media/careerGuide.png": "/studyglobeeducation/static/media/careerGuide.79437cd79c37b0c58862.png",
     "static/media/uni0.jpeg": "/studyglobeeducation/static/media/uni0.26828a6d4c4d68f38b4c.jpeg",
     "static/media/preDepSupp.png": "/studyglobeeducation/static/media/preDepSupp.68e9a1c691b93bc9a66d.png",
-    "static/media/logo.png": "/studyglobeeducation/static/media/logo.1fca610b3fee07e8121d.png",
     "static/media/MyriadPro-Regular.otf": "/studyglobeeducation/static/media/MyriadPro-Regular.31fe6e69dd2c18a7c626.otf",
     "static/media/uni.webp": "/studyglobeeducation/static/media/uni.d5ead23cd63798125ed7.webp",
     "static/media/uni1.webp": "/studyglobeeducation/static/media/uni1.93c6b7956fa906832ff3.webp",
@@ -23,12 +23,12 @@
     "static/media/services.webp": "/studyglobeeducation/static/media/services.63756f9a7ab48b9ebd56.webp",
     "static/media/counsel.png": "/studyglobeeducation/static/media/counsel.ff053b9ef40d0921bb26.png",
     "index.html": "/studyglobeeducation/index.html",
-    "main.4167d6a6.css.map": "/studyglobeeducation/static/css/main.4167d6a6.css.map",
-    "main.062e63f8.js.map": "/studyglobeeducation/static/js/main.062e63f8.js.map",
+    "main.eb7ab493.css.map": "/studyglobeeducation/static/css/main.eb7ab493.css.map",
+    "main.8bbfd95f.js.map": "/studyglobeeducation/static/js/main.8bbfd95f.js.map",
     "787.d02ef714.chunk.js.map": "/studyglobeeducation/static/js/787.d02ef714.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4167d6a6.css",
-    "static/js/main.062e63f8.js"
+    "static/css/main.eb7ab493.css",
+    "static/js/main.8bbfd95f.js"
   ]
 }
