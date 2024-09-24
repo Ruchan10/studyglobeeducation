@@ -1,0 +1,192 @@
+.claves-para-exito-button-div {
+  color: white !important;
+  background-color: #f89422 !important;
+  height: 50px;
+  width: 200px;
+  margin-left: 50px;
+  border: 1px solid #f89422 !important;
+  border-radius: 0 !important;
+  font-weight: bold;
+}
+
+.claves-para-exito-div{
+    background-color: #f9f9f9; 
+  padding: 4px 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+.claves-para-exito-button-p {
+  text-align: center;
+  position: relative;
+  top: 25%;
+}
+
+.claves-para-exito-header-div {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.v-spacer {
+  width: 15px;
+}
+
+.claves-para-exito-card-body {
+  margin-top: 10px;
+}
+
+.claves-para-exito-title-p {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.claves-text-div {
+  color: #9d9e9f;
+  text-align: justify;
+  font-size: 1.1rem;
+}
+
+.spacer {
+  height: 50px !important;
+  background-color: transparent !important;
+}
+
+.spacer-25 {
+  height: 25px !important;
+  background-color: transparent !important;
+}
+
+.claves-para-exito-tag-p {
+  color: #9d9e9f;
+  text-align: start;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top:50px;
+}
+
+.claves-para-exito-tag-h2{
+    font-family: "DIN Alternate Bold" !important;
+    font-weight: bold !important;
+    font-size: 2.8vw !important;
+}
+
+.claves-para-exito-col-first{
+    margin-left:0 !important;
+    margin-right:auto !important;
+    width:90%;
+}
+
+.claves-para-exito-col-second{
+    margin-left:auto !important;
+    margin-right:auto !important;
+    width:90%;
+    background-color: #f9f9f9; 
+    padding: 40px 20px;
+}
+
+.claves-para-exito-col-second,
+.claves-para-exito-col-first {
+  width: 100%; /* Ensures columns do not exceed viewport width */
+  padding: 0 10px; /* Adds padding to prevent edge issues */
+}
+
+.claves-para-exito-tag-h3 {
+    font-size: 1.9rem;
+    color: #656566; 
+
+    text-align: center;
+    padding: 2%;
+  }
+
+  
+@media screen and (max-width: 578px){
+
+  .claves-para-exito-header-div {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .claves-para-exito-icon-div{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .claves-para-exito-tag-p {
+    font-size: 1.0rem; /* Adjust font size for smaller screens */
+    margin-top: 50px;
+    text-align: center;
+  }
+
+  .claves-para-exito-title-p {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .claves-text-div {
+    text-align: justify;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .claves-para-exito-col-second{
+    margin-left:auto !important;
+    margin-right:auto !important;
+    width:90%;
+}
+
+  .claves-para-exito-tag-h3{
+    font-family: "DIN Alternate Bold" !important;
+    font-weight: bold !important;
+    font-size: 1.2rem;
+    padding:2%;
+}
+
+
+.claves-para-exito-button-div {
+  text-align: center;
+  margin-left: auto!important;
+  margin-right: auto !important;
+}
+
+.claves-para-exito-col-first{
+  margin-left:auto !important;
+  margin-right:auto !important;
+  width:90%;
+}
+
+}
+/* Responsive Styles */
+@media screen and (max-width: 578px) {
+    .claves-para-exito-col-second {
+      margin-left: auto !important;
+      margin-right: auto !important;
+      width: 98%;
+    }
+  
+    .claves-para-exito-tag-h3 {
+        font-family: "DIN Alternate Bold" !important;
+        font-weight: bold !important;
+        font-size: 1.4rem;
+        text-align: center;
+    color: #656566; 
+
+    padding:2%;
+
+    }
+  
+    .claves-para-exito-tag-p {
+      font-size: 1.0rem; /* Adjusted for smaller screens */
+      margin-top: 50px;
+      text-align: center !important;
+    }
+    
+    .claves-para-exito-button-div {
+      text-align: center;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+  }

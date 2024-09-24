@@ -1,0 +1,80 @@
+.service-grid-div {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding: 20px;
+}
+
+.service-grid-card {
+    width: 100% !important;
+    max-width: 450px !important;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    background: transparent;
+}
+
+.service-grid-row {
+    margin-top: 20px;
+}
+
+.service-grid-col {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.service-grid-card-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease-in-out;
+}
+
+.service-grid-card p.description {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 10px 20px;
+    background: rgba(51, 51, 51, 0.7);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0; 
+    transition: opacity 0.3s ease-in-out;
+    z-index: 2; 
+}
+
+.service-grid-card:hover .service-grid-card-img {
+    transform: scale(1.1);
+}
+
+.service-grid-card:hover p.description {
+    opacity: 1; 
+}
+
+.service-grid-card p.subtext {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 5px 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+    width: 100%;
+    z-index: 1; 
+    opacity: 1; 
+}
+
+.service-grid-card:hover p.subtext {
+    opacity: 1; 
+}
