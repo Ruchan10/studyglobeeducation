@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/studyglobeeducation/static/css/main.a18f33df.css",
-    "main.js": "/studyglobeeducation/static/js/main.74d6f358.js",
+    "main.css": "/studyglobeeducation/static/css/main.84ea36a9.css",
+    "main.js": "/studyglobeeducation/static/js/main.e90ad7b0.js",
     "static/js/787.d02ef714.chunk.js": "/studyglobeeducation/static/js/787.d02ef714.chunk.js",
     "static/media/banner5.jpg": "/studyglobeeducation/static/media/banner5.2451fb3c8201b8b3c02d.jpg",
     "static/media/banner.jpg": "/studyglobeeducation/static/media/banner.b62234edcf0c91dd7a29.jpg",
@@ -26,12 +26,12 @@
     "static/media/services.webp": "/studyglobeeducation/static/media/services.63756f9a7ab48b9ebd56.webp",
     "static/media/counsel.png": "/studyglobeeducation/static/media/counsel.ff053b9ef40d0921bb26.png",
     "index.html": "/studyglobeeducation/index.html",
-    "main.a18f33df.css.map": "/studyglobeeducation/static/css/main.a18f33df.css.map",
-    "main.74d6f358.js.map": "/studyglobeeducation/static/js/main.74d6f358.js.map",
+    "main.84ea36a9.css.map": "/studyglobeeducation/static/css/main.84ea36a9.css.map",
+    "main.e90ad7b0.js.map": "/studyglobeeducation/static/js/main.e90ad7b0.js.map",
     "787.d02ef714.chunk.js.map": "/studyglobeeducation/static/js/787.d02ef714.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a18f33df.css",
-    "static/js/main.74d6f358.js"
+    "static/css/main.84ea36a9.css",
+    "static/js/main.e90ad7b0.js"
   ]
 }
