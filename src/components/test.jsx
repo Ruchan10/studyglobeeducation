@@ -1,161 +1,232 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
+import { Button, Link, Paper, TextField } from "@mui/material";
 import {
-  GridRowModes,
   DataGrid,
-  GridToolbarContainer,
   GridActionsCellItem,
-  GridRowEditStopReasons,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
 } from "@mui/x-data-grid";
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-} from "@mui/x-data-grid-generator";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { React, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../firebaseConfig";
+import "../styles/UserAccountInfo.css";
 
-const roles = ["Market", "Finance", "Development"];
-const randomRole = () => {
-  return randomArrayItem(roles);
+// Function to calculate column widths
+const calculateColumnWidths = (rows, column) => {
+  const maxLength = Math.max(
+    ...rows.map((row) => (row[column] ? row[column].toString().length : 0))
+  );
+  return Math.max(maxLength * 10, 70); // Minimum width set to 70
 };
+const paginationModel = { page: 0, pageSize: 5 };
 
-const initialRows = [
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-];
+const CustomToolbar = ({ rows, columns }) => {
+  const handleExportPdf = () => {
+    const doc = new jsPDF();
 
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
+    // Add table headers and rows to PDF
+    doc.autoTable({
+      head: [columns.map((col) => col.headerName)],
+      body: rows.map((row) => columns.map((col) => row[col.field])),
+    });
 
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: "", age: "", role: "", isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
+    doc.save("data.pdf");
   };
 
   return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "8px",
+      }}
+    >
+      <div>
+        <GridToolbarDensitySelector />
+      </div>
+      <div>
+        <GridToolbarExport />
+        <Button
+          variant="outlined"
+          onClick={handleExportPdf}
+          style={{ marginLeft: "10px" }}
+        >
+          Export to PDF
+        </Button>
+      </div>
+    </div>
   );
-}
+};
 
 export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleRowEditStop = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
+  const handleDeleteClick = (id) => async () => {
+    try {
+      setIsDeleting(true);
+      const docRef = doc(db, "users", id);
+      await deleteDoc(docRef);
+      // Refresh the table by fetching the data again
+      fetchUsers();
+    } catch (error) {
+      console.error("Error deleting document: ", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const fetchUsers = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      const usersData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUsers(usersData);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
   };
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
-
-  const handleCancelClick = (id) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        navigate("/admin");
+      }
+      setLoading(false);
     });
+    fetchUsers();
+  }, []);
 
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
-  };
+  // Filtered rows based on search query
+  const filteredRows = users.filter((row) => {
+    return (
+      row.purpose?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.phone?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      row.email?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };
-
-  const handleRowModesModelChange = (newRowModesModel) => {
-    setRowModesModel(newRowModesModel);
-  };
+  if (loading) {
+    return <div className="text-center">Loading...</div>;
+  }
 
   const columns = [
-    { field: "name", headerName: "Name", width: 180, editable: true },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      width: 80,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
+      field: "purpose",
+      headerName: "Purpose",
+      width: calculateColumnWidths(users, "purpose"),
+      sortable: true,
     },
     {
-      field: "joinDate",
-      headerName: "Join date",
-      type: "date",
-      width: 180,
-      editable: true,
+      field: "country",
+      headerName: "Country",
+      width: calculateColumnWidths(users, "country"),
+      sortable: true,
     },
     {
-      field: "role",
-      headerName: "Department",
-      width: 220,
-      editable: true,
-      type: "singleSelect",
-      valueOptions: ["Market", "Finance", "Development"],
+      field: "firstName",
+      headerName: "First name",
+      width: calculateColumnWidths(users, "firstName"),
+      sortable: true,
+    },
+    {
+      field: "lastName",
+      headerName: "Last name",
+      width: calculateColumnWidths(users, "lastName"),
+      sortable: true,
+    },
+    {
+      field: "address",
+      headerName: "Address",
+      width: calculateColumnWidths(users, "address"),
+      sortable: true,
+    },
+    {
+      field: "phone",
+      headerName: "Phone",
+      width: calculateColumnWidths(users, "phone"),
+      sortable: true,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: calculateColumnWidths(users, "email"),
+      sortable: true,
+    },
+    {
+      field: "marksheet",
+      headerName: "Marksheet",
+      width: calculateColumnWidths(users, "marksheet"),
+      sortable: true,
+      filterable: false,
+      renderCell: (params) => (
+        <Link href={params.value} target="_blank" rel="noopener">
+          View Marksheet
+        </Link>
+      ),
+    },
+    {
+      field: "passport",
+      headerName: "Passport",
+      width: calculateColumnWidths(users, "passport"),
+      sortable: true,
+      filterable: false,
+      renderCell: (params) => (
+        <Link href={params.value} target="_blank" rel="noopener">
+          View Passport
+        </Link>
+      ),
+    },
+    {
+      field: "charCert",
+      headerName: "Character",
+      width: calculateColumnWidths(users, "charCert"),
+      sortable: true,
+      filterable: false,
+      renderCell: (params) => (
+        <Link href={params.value} target="_blank" rel="noopener">
+          View Character Certificate
+        </Link>
+      ),
+    },
+    {
+      field: "provCert",
+      headerName: "Provisional",
+      width: calculateColumnWidths(users, "provCert"),
+      sortable: true,
+      filterable: false,
+      renderCell: (params) => (
+        <Link href={params.value} target="_blank" rel="noopener">
+          View Provisional Certificate
+        </Link>
+      ),
+    },
+    {
+      field: "additionalDoc",
+      headerName: "Extra Docs",
+      width: calculateColumnWidths(users, "additionalDoc"),
+      sortable: true,
+      filterable: false,
+      renderCell: (params) => (
+        <Link href={params.value} target="_blank" rel="noopener">
+          View Extra Docs
+        </Link>
+      ),
     },
     {
       field: "actions",
@@ -163,76 +234,57 @@ export default function FullFeaturedCrudGrid() {
       headerName: "Actions",
       width: 100,
       cellClassName: "actions",
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: "primary.main",
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
+      getActions: ({ id }) => [
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={handleDeleteClick(id)}
+          color="inherit"
+        />,
+      ],
     },
   ];
 
   return (
-    <Box
-      sx={{
-        height: 500,
-        width: "100%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-      />
-    </Box>
+    <div className="color-background">
+      <h2 className="text-center landing-custom-header2">
+        <span className="secondary-color-span landing-din-alternate-bold-font">
+          Submitted Users Information
+        </span>
+      </h2>
+
+      <div className="user-list-container">
+        {/* Search Box */}
+        <TextField
+          label="Search"
+          variant="outlined"
+          margin="normal"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
+        {users.length === 0 ? (
+          <p className="text-center">No users found.</p>
+        ) : (
+          <Paper sx={{ height: "90%", width: "100%" }}>
+            <DataGrid
+              rows={filteredRows}
+              disableColumnMenu={true}
+              autoHeight={true}
+              disableRowSelectionOnClick
+              columns={columns}
+              initialState={{ pagination: { paginationModel } }}
+              pageSizeOptions={[5, 10]}
+              slots={{
+                toolbar: () => (
+                  <CustomToolbar rows={filteredRows} columns={columns} />
+                ),
+              }}
+              sx={{ border: 0 }}
+            />
+          </Paper>
+        )}
+      </div>
+    </div>
   );
 }

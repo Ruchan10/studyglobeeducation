@@ -196,7 +196,7 @@
       margin: 0 auto;
       text-align: center;
       align-content: center;
-      background-color: #333;
+      /* background-color: #333; */
     }
   
     .create-account-col {

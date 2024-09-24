@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import "../styles/ContactUs.css";
 
-import axios from "axios";
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Button, Col, Form, Row } from "react-bootstrap";
@@ -49,6 +48,7 @@ function ContactUs() {
   };
 
   const onSubmitForm = async (e) => {
+    setIsLoading(true);
     try {
       if (selectedCountry == "") {
         console.error("Please select a country!!!");
@@ -87,6 +87,8 @@ function ContactUs() {
       const fileURL3 = await getDownloadURL(storageRef3);
 
       const userData = {
+        purpose: currentPlan,
+        country: selectedCountry,
         firstName: firstName,
         lastName: lastName,
         address: address,
@@ -103,7 +105,7 @@ function ContactUs() {
       await saveUserData(userData);
       setIsLoading(false);
 
-      console.success("Files submitted successfully!");
+      console.log("Files submitted successfully!");
       setEmail("");
       setPhone("");
       setMarksheet(null);
