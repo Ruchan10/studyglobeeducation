@@ -24,20 +24,26 @@ function CustomNavbar() {
   };
   const element = homeSection.current;
   useEffect(() => {
-    if (element) {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setUser(user);
-        } else {
-          setUser(null);
-        }
-        setLoading(false);
-      });
+    console.log("IN NAV BAR");
+    onAuthStateChanged(auth, (user) => {
+      console.log("IN AUTH STATA CHANGED");
 
-      setTimeout(() => {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
-    }
+      if (user) {
+        console.log("USER");
+        console.log(user);
+
+        setUser(user);
+      } else {
+        console.log("USER == null");
+        console.log(user);
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    setTimeout(() => {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
   }, [hash, element]);
 
   return (

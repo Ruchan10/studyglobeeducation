@@ -1,15 +1,34 @@
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { Link, Paper, TextField } from "@mui/material";
-import { DataGrid, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridToolbarExport,
+} from "@mui/x-data-grid";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FullFeaturedCrudGrid from "../components/test";
 import { auth, db } from "../firebaseConfig";
 import "../styles/UserAccountInfo.css";
 
 const paginationModel = { page: 0, pageSize: 5 };
+
+const CustomToolbar = () => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "8px",
+      }}
+    >
+      <div>
+        <GridToolbarExport />
+      </div>
+    </div>
+  );
+};
 
 export default function UserInfo() {
   const navigate = useNavigate();
@@ -142,6 +161,19 @@ export default function UserInfo() {
     },
   ];
 
+  const fetchUsers = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      const usersData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUsers(usersData);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -152,18 +184,6 @@ export default function UserInfo() {
       setLoading(false);
     });
 
-    const fetchUsers = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        const usersData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setUsers(usersData);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
     fetchUsers();
   }, []);
 
@@ -177,21 +197,12 @@ export default function UserInfo() {
       await deleteDoc(docRef);
 
       console.log("Deleted successfully!");
+      fetchUsers();
     } catch (error) {
       console.error("Error deleting document: ", error);
       console.error("Failed to delete document.");
     } finally {
       setIsDeleting(false);
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        const usersData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setUsers(usersData);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
     }
   };
 
@@ -238,13 +249,13 @@ export default function UserInfo() {
               columns={columns}
               initialState={{ pagination: { paginationModel } }}
               pageSizeOptions={[5, 10]}
-              slots={{ toolbar: GridToolbar }}
+              slots={{ toolbar: () => <CustomToolbar /> }}
               sx={{ border: 0 }}
             />
           </Paper>
         )}
       </div>
-      <FullFeaturedCrudGrid />
+      {/* <FullFeaturedCrudGrid /> */}
     </div>
   );
 }

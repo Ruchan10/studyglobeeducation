@@ -1,14 +1,8 @@
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { Button, Link, Paper, TextField } from "@mui/material";
-import {
-  DataGrid,
-  GridActionsCellItem,
-  GridToolbarDensitySelector,
-  GridToolbarExport,
-} from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
-import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,39 +19,36 @@ const calculateColumnWidths = (rows, column) => {
 const paginationModel = { page: 0, pageSize: 5 };
 
 const CustomToolbar = ({ rows, columns }) => {
-  const handleExportPdf = () => {
-    const doc = new jsPDF();
-
-    // Add table headers and rows to PDF
-    doc.autoTable({
-      head: [columns.map((col) => col.headerName)],
-      body: rows.map((row) => columns.map((col) => row[col.field])),
+  const handleExportCsv = () => {
+    const data = rows.map((row) => {
+      const result = {};
+      columns.forEach((col) => {
+        result[col.headerName] = row[col.field];
+      });
+      return result;
     });
 
-    doc.save("data.pdf");
+    // Convert to CSV format
+    const csvData = data.map((row) => Object.values(row).join(",")).join("\n");
+    const csvBlob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    const csvUrl = URL.createObjectURL(csvBlob);
+
+    // Create a link to download the CSV
+    const link = document.createElement("a");
+    link.href = csvUrl;
+    link.setAttribute("download", "data.csv"); // Specify the filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
     <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "8px",
-      }}
+      style={{ padding: "8px", display: "flex", justifyContent: "flex-end" }}
     >
-      <div>
-        <GridToolbarDensitySelector />
-      </div>
-      <div>
-        <GridToolbarExport />
-        <Button
-          variant="outlined"
-          onClick={handleExportPdf}
-          style={{ marginLeft: "10px" }}
-        >
-          Export to PDF
-        </Button>
-      </div>
+      <Button variant="outlined" onClick={handleExportCsv}>
+        Export to CSV
+      </Button>
     </div>
   );
 };
@@ -276,7 +267,7 @@ export default function FullFeaturedCrudGrid() {
               initialState={{ pagination: { paginationModel } }}
               pageSizeOptions={[5, 10]}
               slots={{
-                toolbar: () => (
+                Toolbar: () => (
                   <CustomToolbar rows={filteredRows} columns={columns} />
                 ),
               }}
