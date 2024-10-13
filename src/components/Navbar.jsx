@@ -135,6 +135,18 @@ function CustomNavbar() {
               </span>
             </Nav.Link>
           ) : null}
+          {!user ? (
+            <Nav.Link className="navbar-link">
+              <span
+                onClick={() => navigate("/admin")}
+                className={
+                  current_link === "Login" ? "secondary-color-span" : ""
+                }
+              >
+                Login
+              </span>
+            </Nav.Link>
+          ) : null}
         </Nav>
       </Navbar.Collapse>
     </Navbar>

@@ -8,6 +8,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { React, useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebaseConfig";
 import "../styles/UserAccountInfo.css";
@@ -162,6 +163,7 @@ export default function UserInfo() {
   ];
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const querySnapshot = await getDocs(collection(db, "users"));
       const usersData = querySnapshot.docs.map((doc) => ({
@@ -172,17 +174,19 @@ export default function UserInfo() {
     } catch (error) {
       console.error("Error fetching users:", error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
+    setLoading(true);
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
       } else {
         navigate("/admin");
       }
-      setLoading(false);
     });
+    setLoading(false);
 
     fetchUsers();
   }, []);
@@ -218,7 +222,13 @@ export default function UserInfo() {
   });
 
   if (loading) {
-    return <div className="text-center">Loading...</div>;
+    return (
+      <div className="text-center">
+        <Spinner animation="border" role="status">
+          <span className="sr-only"></span>
+        </Spinner>
+      </div>
+    );
   }
 
   return (
