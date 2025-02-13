@@ -1,7 +1,7 @@
 import React from "react";
 
 import EditFileIcon from "../assets/icons/edit-file-icon.png";
-import banner2 from "../assets/images/uni.webp";
+import banner2 from "../assets/images/uni.jpg";
 
 import { Button } from "react-bootstrap";
 import "../styles/ServiceBanner.css";

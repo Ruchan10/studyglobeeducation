@@ -1,7 +1,6 @@
 import { Container, Row } from "react-bootstrap";
 
 import { Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import facebookIcon from "../assets/icons/facbook-icon.png";
 import instagramIcon from "../assets/icons/instagram-icon.png";
 import linkedinIcon from "../assets/icons/linkedin.png";
@@ -10,7 +9,6 @@ import { useSectionContext } from "../context/SectionContext";
 import "../styles/Footer.css";
 
 import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 import { useContextMenu } from "../context/MenuContext";
@@ -23,6 +21,8 @@ function Footer() {
   const { current_link, setCurrentLinkHelper } = useContextMenu();
   const { user, login, logout } = useAuth();
 
+  const currentURL = window.location.href;
+  const showBtns = !currentURL.includes("users");
   useEffect(() => {
     // console.log(current_link);
   }, [current_link]);
@@ -34,65 +34,52 @@ function Footer() {
     <footer className="footer">
       <Container className="footer-div">
         <Row className="footer-nav-row">
-          <div className="footer-nav">
-            <Nav.Link
-              className="footer-link"
-              onClick={() => scrollToSection(homeSection)}
-            >
-              <span
-                className={
-                  current_link === "Home" ? "secondary-color-span" : ""
-                }
+          {showBtns ? (
+            <div className="footer-nav">
+              <Nav.Link
+                className="footer-link"
+                onClick={() => scrollToSection(homeSection)}
               >
-                Home
-              </span>
-            </Nav.Link>
-            <Nav.Link className="footer-link">
-              <span
-                onClick={() => scrollToSection(servicesSection)}
-                className={
-                  current_link === "Services" ? "secondary-color-span" : ""
-                }
-              >
-                Services
-              </span>
-            </Nav.Link>
-            <Nav.Link className="footer-link">
-              <span
-                onClick={() => scrollToSection(aboutUsSection)}
-                className={
-                  current_link === "AboutUs" ? "secondary-color-span" : ""
-                }
-              >
-                About Us
-              </span>
-            </Nav.Link>
-            <Nav.Link className="footer-link">
-              <span
-                onClick={() => scrollToSection(contactUsSection)}
-                className={
-                  current_link === "ContactUs" ? "secondary-color-span" : ""
-                }
-              >
-                Contact Us
-              </span>
-            </Nav.Link>
-
-            {user ? (
-              <Link exact to="/logout" as={NavLink} className="footer-link">
                 <span
-                  onClick={() => setCurrentLinkHelper("Logout")}
                   className={
-                    current_link == "Logout" ? "secondary-color-span" : ""
+                    current_link === "Home" ? "secondary-color-span" : ""
                   }
                 >
-                  Study Abroad
+                  Home
                 </span>
-              </Link>
-            ) : (
-              ""
-            )}
-          </div>
+              </Nav.Link>
+              <Nav.Link className="footer-link">
+                <span
+                  onClick={() => scrollToSection(servicesSection)}
+                  className={
+                    current_link === "Services" ? "secondary-color-span" : ""
+                  }
+                >
+                  Services
+                </span>
+              </Nav.Link>
+              <Nav.Link className="footer-link">
+                <span
+                  onClick={() => scrollToSection(aboutUsSection)}
+                  className={
+                    current_link === "AboutUs" ? "secondary-color-span" : ""
+                  }
+                >
+                  About Us
+                </span>
+              </Nav.Link>
+              <Nav.Link className="footer-link">
+                <span
+                  onClick={() => scrollToSection(contactUsSection)}
+                  className={
+                    current_link === "ContactUs" ? "secondary-color-span" : ""
+                  }
+                >
+                  Contact Us
+                </span>
+              </Nav.Link>
+            </div>
+          ) : null}
         </Row>
 
         <Row className="footer-nav-row">
@@ -103,7 +90,19 @@ function Footer() {
               USA, Australia, Denmark, UK, Canada, Republic of South Korea,
               Japan, Europe
             </p>
-
+            <p>9800000000, studyglobeeducation@gmail.com</p>
+            <p>
+              <a
+                href="https://www.linkedin.com/company/studyglobaltm/?originalSubdomain=np"
+                className="contact-us-s-media-a"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                Chabhel, Kathmandu
+              </a>{" "}
+              & UK
+            </p>
             <p>Copyright © 2024</p>
             <p className="developer-url-text">Developed by Ruchan Kayastha</p>
           </div>

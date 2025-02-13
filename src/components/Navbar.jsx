@@ -19,23 +19,18 @@ function CustomNavbar() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const currentURL = window.location.href;
+  const showBtns = !currentURL.includes("users");
+  console.log(showBtns);
   const scrollToSection = (sectionRef) => {
     sectionRef.current.scrollIntoView({ behavior: "smooth" });
   };
   const element = homeSection.current;
   useEffect(() => {
-    console.log("IN NAV BAR");
     onAuthStateChanged(auth, (user) => {
-      console.log("IN AUTH STATA CHANGED");
-
       if (user) {
-        console.log("USER");
-        console.log(user);
-
         setUser(user);
       } else {
-        console.log("USER == null");
-        console.log(user);
         setUser(null);
       }
       setLoading(false);
@@ -71,46 +66,56 @@ function CustomNavbar() {
       />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="ms-auto navbar-nav">
-          <Nav.Link
-            className="navbar-link"
-            onClick={() => scrollToSection(homeSection)}
-          >
-            <span
-              className={current_link === "Home" ? "secondary-color-span" : ""}
+          {showBtns ? (
+            <Nav.Link
+              className="navbar-link"
+              onClick={() => scrollToSection(homeSection)}
             >
-              Home
-            </span>
-          </Nav.Link>
-          <Nav.Link className="navbar-link">
-            <span
-              onClick={() => scrollToSection(servicesSection)}
-              className={
-                current_link === "Services" ? "secondary-color-span" : ""
-              }
-            >
-              Services
-            </span>
-          </Nav.Link>
-          <Nav.Link className="navbar-link">
-            <span
-              onClick={() => scrollToSection(aboutUsSection)}
-              className={
-                current_link === "AboutUs" ? "secondary-color-span" : ""
-              }
-            >
-              About Us
-            </span>
-          </Nav.Link>
-          <Nav.Link className="navbar-link">
-            <span
-              onClick={() => scrollToSection(contactUsSection)}
-              className={
-                current_link === "ContactUs" ? "secondary-color-span" : ""
-              }
-            >
-              Contact Us
-            </span>
-          </Nav.Link>
+              <span
+                className={
+                  current_link === "Home" ? "secondary-color-span" : ""
+                }
+              >
+                Home
+              </span>
+            </Nav.Link>
+          ) : null}
+          {showBtns ? (
+            <Nav.Link className="navbar-link">
+              <span
+                onClick={() => scrollToSection(servicesSection)}
+                className={
+                  current_link === "Services" ? "secondary-color-span" : ""
+                }
+              >
+                Services
+              </span>
+            </Nav.Link>
+          ) : null}
+          {showBtns ? (
+            <Nav.Link className="navbar-link">
+              <span
+                onClick={() => scrollToSection(aboutUsSection)}
+                className={
+                  current_link === "AboutUs" ? "secondary-color-span" : ""
+                }
+              >
+                About Us
+              </span>
+            </Nav.Link>
+          ) : null}
+          {showBtns ? (
+            <Nav.Link className="navbar-link">
+              <span
+                onClick={() => scrollToSection(contactUsSection)}
+                className={
+                  current_link === "ContactUs" ? "secondary-color-span" : ""
+                }
+              >
+                Contact Us
+              </span>
+            </Nav.Link>
+          ) : null}
           {user ? (
             <Nav.Link className="navbar-link">
               <span

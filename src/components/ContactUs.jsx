@@ -1,3 +1,4 @@
+import { message } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +32,7 @@ function ContactUs() {
     try {
       await addDoc(collection(db, "users"), userData);
     } catch (error) {
-      console.error("Error saving user data:", error);
+      message.error("Error saving user data:", error);
       throw error;
     }
   };
@@ -51,7 +52,7 @@ function ContactUs() {
     setIsLoading(true);
     try {
       if (selectedCountry == "") {
-        console.error("Please select a country!!!");
+        message.error("Please select a country!!!");
         return;
       }
       if (
@@ -65,7 +66,7 @@ function ContactUs() {
         !charCert ||
         !additionalDoc
       ) {
-        console.error("All Fields Are Required!!!");
+        message.error("All Fields Are Required!!!");
         return;
       }
       const storageRef = ref(storage, `${firstName}_${lastName}_Marksheet`);
@@ -105,7 +106,7 @@ function ContactUs() {
       await saveUserData(userData);
       setIsLoading(false);
 
-      console.log("Files submitted successfully!");
+      message.log("Files submitted successfully!");
       setEmail("");
       setPhone("");
       setMarksheet(null);
@@ -117,7 +118,7 @@ function ContactUs() {
       setFirstName("");
       setLastName("");
     } catch (error) {
-      console.error("Sorry, can't submit files currently!!!");
+      message.error("Sorry, can't submit files currently!!!");
 
       console.error("Error in uploading user data and file:", error);
     }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 // import { message } from "antd";
+import { message } from "antd";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { Button, Card, Container, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
@@ -28,11 +29,11 @@ function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setIsLoading(false);
-      console.success("Login Successful!");
+      message.success("Login Successful!");
       navigate("/");
     } catch (error) {
       setIsLoading(false);
-      console.error("Login Unsuccessful!!!");
+      message.error("Login Unsuccessful!!!");
 
       console.log("Failed to login. Please check your credentials:- " + error);
     }
